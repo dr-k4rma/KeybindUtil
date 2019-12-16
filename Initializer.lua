@@ -10,6 +10,8 @@
 
 local Plugin = {}
 
+local DefaultKeybinds = script.Parent.DefaultKeybinds
+
 --// CHANGABLE VARIABLES \\--
 
 
@@ -23,7 +25,7 @@ local Plugin = {}
 Plugin.Source = plugin
 Plugin.Mouse = Plugin.Source:GetMouse()
 
-for _, Util in pairs(script:GetChildren()) do
+for _, Util in pairs(DefaultKeybinds:GetChildren()) do
 	xpcall(
 		function()
 			Util = require(Util)
