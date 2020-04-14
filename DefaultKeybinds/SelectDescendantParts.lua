@@ -2,8 +2,8 @@
 --[[
 	Project: Utility Binds Plugin
 	Author: Dr_K4rma
-	Date: 29 Nov. 2019, Updated 14 April 2020
-	Provides: Select Descendants
+	Date: 14 April 2020
+	Provides: Select Descendant Parts
 --]]
 
 --// SERVICES AND PRIMARY OBJECTS \\--
@@ -11,22 +11,22 @@ local UIS = game:GetService("UserInputService")
 local ChangeHistoryService = game:GetService("ChangeHistoryService")
 local Selection = game:GetService("Selection")
 
-local SelectDescendants = {}
+local SelectDescendantParts = {}
 
 --// CHANGABLE VARIABLES \\--
-SelectDescendants.Binds = {
-	SelectDescendants = {
-		Text = "Select Descendants",
-		Description = "Selects the descendants of the PARENT of the part your mouse is hovering over",
+SelectDescendantParts.Binds = {
+	SelectDescendantParts = {
+		Text = "Select Descendant Parts",
+		Description = "Selects the descendant parts of the PARENT of the part your mouse is hovering over",
 		Icon = "http://www.roblox.com/asset/?id=4479634634",
 		AllowBinding = true,
 	},
-	AppendSelectDescendants = {
-		Text = "[Append] Select Descendants",
-		Description = "[Append] Selects the descendants of the PARENT of the part your mouse is hovering over",
+	AppendSelectDescendantParts = {
+		Text = "[Append] Select Descendant Parts",
+		Description = "[Append] Selects the descendant parts of the PARENT of the part your mouse is hovering over",
 		Icon = "http://www.roblox.com/asset/?id=4479634634",
 		AllowBinding = true,
-	},
+	}
 }
 
 --// FUNCTIONS \\--
@@ -36,20 +36,24 @@ function merge(...)
 	for _, Table in pairs(tables) do
 		if typeof(Table) == "table" then
 			for _, a in pairs(Table) do
-				table.insert(t, a)
+				if a:IsA("BasePart") then
+					table.insert(t, a)
+				end
 			end
 		else
-			table.insert(t, Table)
+			if Table:IsA("BasePart") then
+				table.insert(t, Table)
+			end
 		end
 	end
 	return t
 end
 
-function SelectDescendantsAction(Plugin, Append)
-	Append = Append or false
+function SelectDescendantPartsAction(Plugin, Append)
+	local Append = Append or false
 	local Target = Plugin.Mouse.Target
 	if not Target then return end
-	local ToSelect = {}
+	local ToSelect = Append and Selection:Get() or {}
 	if (Target.Parent:IsA("Model") or Target.Parent:IsA("Folder")) and Target.Parent ~= workspace then
 		if Append then
 			ToSelect = merge(Selection:Get(), Target.Parent:GetDescendants())
@@ -68,14 +72,14 @@ function SelectDescendantsAction(Plugin, Append)
 	end
 end
 
-function SelectDescendants.SelectDescendants(Plugin)
-	SelectDescendantsAction(Plugin, false)
+function SelectDescendantParts.SelectDescendantParts(Plugin)
+	SelectDescendantPartsAction(Plugin, false)
 end
 
-function SelectDescendants.AppendSelectDescendants(Plugin)
-	SelectDescendantsAction(Plugin, true)
+function SelectDescendantParts.AppendSelectDescendantParts(Plugin)
+	SelectDescendantPartsAction(Plugin, true)
 end
 
 --// MAIN CODE \\--
 
-return SelectDescendants
+return SelectDescendantParts
