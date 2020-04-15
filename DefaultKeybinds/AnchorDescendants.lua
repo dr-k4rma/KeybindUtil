@@ -25,8 +25,11 @@ AnchorDescendants.Binds = {
 --// FUNCTIONS \\--
 function AnchorDescendants.AnchorDescendants(Plugin)
 	local Selection = Selection:Get()
-	if Selection > 0 then
+	if #Selection > 0 then
 		for _, a in pairs(Selection) do
+			if a:IsA("BasePart") then
+				a.Anchored = true
+			end
 			for _, b in pairs(a:GetDescendants()) do
 				if b:IsA("BasePart") then
 					b.Anchored = true
