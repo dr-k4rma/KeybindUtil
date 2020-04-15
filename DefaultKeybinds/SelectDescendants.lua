@@ -60,7 +60,7 @@ function SelectDescendantsAction(Plugin, Append)
 		if Append then
 			ToSelect = merge(Selection:Get(), Target:GetDescendants(), Target)
 		else
-			ToSelect = merge(Target.Parent:GetDescendants(), Target)
+			ToSelect = merge(Target:GetDescendants(), Target)
 		end
 	end
 	if #ToSelect > 0 then
